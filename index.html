@@ -236,6 +236,39 @@ index.html
 
   <button onclick="generatePDF()">Exportar a PDF</button>
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script>
+  function generatePDF() {
+    const element = document.getElementById("ficha");
+    const opt = {
+      margin:       0.5,
+      filename:     'ficha_atencion_prehospitalaria.pdf',
+      image:        { type: 'jpeg', quality: 0.98 },
+      html2canvas:  { scale: 2 },
+      jsPDF:        { unit: 'in', format: 'letter', orientation: 'portrait' }
+    };
+    html2pdf().set(opt).from(element).save();
+  }
+
+  function agregarFila(idTabla) {
+    const tabla = document.getElementById(idTabla).getElementsByTagName('tbody')[0];
+    const nuevaFila = tabla.rows[0].cloneNode(true);
+    nuevaFila.querySelectorAll('input').forEach(i => i.value = '');
+    tabla.appendChild(nuevaFila);
+  }
+
+  document.querySelectorAll('input[type=radio]').forEach(input => {
+    input.addEventListener('change', calcularGlasgow);
+  });
+
+  function calcularGlasgow() {
+    let ocular = parseInt(document.querySelector('input[name=ocular]:checked')?.value || 0);
+    let verbal = parseInt(document.querySelector('input[name=verbal]:checked')?.value || 0);
+    let motora = parseInt(document.querySelector('input[name=motora]:checked')?.value || 0);
+    let total = ocular + verbal + motora;
+    document.getElementById('glasgow-total').textContent = total;
+  }
+</script>
 </body>
 </html>
 
