@@ -7,7 +7,11 @@ index.html
   <title>Ficha Atención Prehospitalaria</title>
   <style>
     @media print {
-      body { margin: 1cm; }
+  body { margin: 2cm 2cm 2cm 2cm; }
+  .section { page-break-inside: avoid; }
+  table { page-break-inside: auto; }
+  tr { page-break-inside: avoid; page-break-after: auto; }
+}
       .section { page-break-inside: avoid; }
       table { page-break-inside: auto; }
       tr { page-break-inside: avoid; page-break-after: auto; }
@@ -100,46 +104,138 @@ index.html
   </style>
 </head>
 <body>
-  <div class="container" id="ficha">
-    <!-- TODO: Aquí va todo el contenido de la ficha -->
-    <!-- Ya incluimos todos los campos en los pasos anteriores -->
-    <!-- Puedes copiar y pegar el bloque <div class="section">...</div> aquí como lo tienes en tu canvas -->
+<div class="container" id="ficha">
+  <h1>Ficha Atención Prehospitalaria</h1>
 
-    <button onclick="generatePDF()">Exportar a PDF</button>
+  <div class="section">
+    <h2>Horarios llamados QTR</h2>
+    <div class="field-group">
+      <div class="field"><label>QTR1</label><input></div>
+      <div class="field"><label>QTR2</label><input></div>
+      <div class="field"><label>QTR3</label><input></div>
+      <div class="field"><label>QTR4</label><input></div>
+      <div class="field"><label>QTR5</label><input></div>
+      <div class="field"><label>QTR6</label><input></div>
+      <div class="field"><label>QTR7</label><input></div>
+      <div class="field"><label>QTR8</label><input></div>
+    </div>
   </div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-  <script>
-    function generatePDF() {
-      const element = document.getElementById("ficha");
-      const opt = {
-        margin: 0.5,
-        filename: 'ficha_atencion_prehospitalaria.pdf',
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2 },
-        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
-      };
-      html2pdf().set(opt).from(element).save();
-    }
+  <div class="section">
+    <h2>Datos Administrativos</h2>
+    <label>Fecha</label><input type="date">
+    <label>Ficha Clínica</label><input>
+    <label>Complejidad</label><input>
+    <label>Móvil</label><input>
+    <label>Clave de Activación</label><input>
+  </div>
 
-    function agregarFila(idTabla) {
-      const tabla = document.getElementById(idTabla).getElementsByTagName('tbody')[0];
-      const nuevaFila = tabla.rows[0].cloneNode(true);
-      nuevaFila.querySelectorAll('input').forEach(i => i.value = '');
-      tabla.appendChild(nuevaFila);
-    }
+  <div class="section">
+    <h2>Datos del Paciente</h2>
+    <div class="field-group">
+      <div class="field"><label>Nombre</label><input></div>
+      <div class="field"><label>RUT</label><input></div>
+      <div class="field"><label>Edad</label><input></div>
+      <div class="field"><label>Previsión</label><input></div>
+      <div class="field"><label>Teléfono</label><input></div>
+      <div class="field"><label>Sexo</label><select><option>Masculino</option><option>Femenino</option></select></div>
+    </div>
+    <label>Dirección del Evento</label><input>
+    <label>Comuna</label><input>
+    <label>Dirección de Destino</label><input>
+    <label>Comuna</label><input>
+    <label>Antecedentes Mórbidos</label><textarea rows="2"></textarea>
+    <label>Alergias</label><textarea rows="2"></textarea>
+    <label>Aliento Etílico</label><input>
+    <label>Uso de Medicamentos</label><textarea rows="2"></textarea>
+  </div>
 
-    document.querySelectorAll('input[type=radio]').forEach(input => {
-      input.addEventListener('change', calcularGlasgow);
-    });
+  <div class="section">
+    <label for="motivo-consulta">Motivo de Atención</label>
+    <textarea id="motivo-consulta" rows="3"></textarea>
+    <label for="historia-clinica">Historia Clínica</label>
+    <textarea id="historia-clinica" rows="6"></textarea>
+  </div>
 
-    function calcularGlasgow() {
-      let ocular = parseInt(document.querySelector('input[name=ocular]:checked')?.value || 0);
-      let verbal = parseInt(document.querySelector('input[name=verbal]:checked')?.value || 0);
-      let motora = parseInt(document.querySelector('input[name=motora]:checked')?.value || 0);
-      let total = ocular + verbal + motora;
-      document.getElementById('glasgow-total').textContent = total;
-    }
-  </script>
+  <div class="section" style="text-align: left;">
+    <h2 style="text-align: left;">Escala de Glasgow</h2>
+    <table>
+      <thead><tr><th>Respuesta</th><th>Puntaje</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Ocular</strong></td><td></td></tr>
+        <tr><td>4 - Espontánea</td><td><input type="radio" name="ocular" value="4"></td></tr>
+        <tr><td>3 - A la voz</td><td><input type="radio" name="ocular" value="3"></td></tr>
+        <tr><td>2 - Al dolor</td><td><input type="radio" name="ocular" value="2"></td></tr>
+        <tr><td>1 - No responde</td><td><input type="radio" name="ocular" value="1"></td></tr>
+
+        <tr><td><strong>Verbal</strong></td><td></td></tr>
+        <tr><td>5 - Normal</td><td><input type="radio" name="verbal" value="5"></td></tr>
+        <tr><td>4 - Desorientado</td><td><input type="radio" name="verbal" value="4"></td></tr>
+        <tr><td>3 - Inapropiado o confuso</td><td><input type="radio" name="verbal" value="3"></td></tr>
+        <tr><td>2 - Incoherente</td><td><input type="radio" name="verbal" value="2"></td></tr>
+        <tr><td>1 - No responde</td><td><input type="radio" name="verbal" value="1"></td></tr>
+
+        <tr><td><strong>Motora</strong></td><td></td></tr>
+        <tr><td>6 - Obedece a la voz</td><td><input type="radio" name="motora" value="6"></td></tr>
+        <tr><td>5 - Localiza al dolor</td><td><input type="radio" name="motora" value="5"></td></tr>
+        <tr><td>4 - Retira al dolor</td><td><input type="radio" name="motora" value="4"></td></tr>
+        <tr><td>3 - Flexiona al dolor</td><td><input type="radio" name="motora" value="3"></td></tr>
+        <tr><td>2 - Extiende al dolor</td><td><input type="radio" name="motora" value="2"></td></tr>
+        <tr><td>1 - No responde</td><td><input type="radio" name="motora" value="1"></td></tr>
+      </tbody>
+    </table>
+    <p style="margin-top: 10px; font-size: 18px;"><strong>Puntaje Total Glasgow:</strong> <span id="glasgow-total">0</span></p>
+  </div>
+
+  <div class="section">
+    <h2>Signos Vitales</h2>
+    <table id="tabla-signos">
+      <thead>
+        <tr><th>Hora</th><th>FC</th><th>FR</th><th>P/A</th><th>PAM</th><th>Tº</th><th>Sat O2</th><th>FIO2</th><th>HGT</th><th>Llene Capilar</th><th>Glasgow</th><th>EVA</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><input type="time"></td><td><input></td><td><input></td><td><input></td><td><input></td><td><input></td><td><input></td><td><input></td><td><input></td><td><input></td><td><input></td><td><input></td></tr>
+      </tbody>
+    </table>
+    <button type="button" onclick="agregarFila('tabla-signos')">+ Agregar fila</button>
+  </div>
+
+  <div class="section">
+    <h2>Medicamentos Administrados</h2>
+    <table id="tabla-medicamentos">
+      <thead><tr><th>Hora</th><th>Medicamento</th><th>Vía</th></tr></thead>
+      <tbody>
+        <tr><td><input type="time"></td><td><input></td><td><input></td></tr>
+      </tbody>
+    </table>
+    <button type="button" onclick="agregarFila('tabla-medicamentos')">+ Agregar fila</button>
+  </div>
+
+  <div class="section">
+    <h2>Insumos Utilizados</h2>
+    <textarea rows="4" placeholder="Ej: Monitor, ECG, IOT, VMI, Desfibrilador, CVC..."></textarea>
+  </div>
+
+  <div class="section">
+    <h2>Personal Interventor</h2>
+    <label>Médico</label><input>
+    <label>Enfermero</label><input>
+    <label>TENS</label><input>
+    <label>Conductor</label><input>
+    <label>Radioperador</label><input>
+  </div>
+
+  <div class="section">
+    <h2>Personal Receptor</h2>
+    <label>Médico</label><input>
+    <label>Enfermero</label><input>
+    <label>TENS</label><input>
+    <label>Conductor</label><input>
+    <label>Radioperador</label><input>
+  </div>
+
+  <button onclick="generatePDF()">Exportar a PDF</button>
+</div>
 </body>
 </html>
+
